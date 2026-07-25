@@ -1,0 +1,14 @@
+{
+  "request_id": "sample-wave-stub",
+  "source": "stub",
+  "clip_id": "wave_01",
+  "play_rate": 1.0,
+  "blend_in_sec": 0.2,
+  "fps": null,
+  "frames": null,
+  "metadata": {
+    "latency_ms": "0",
+    "device": "stub",
+    "intent": "make the character wave hello"
+  }
+}
