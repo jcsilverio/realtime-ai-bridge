@@ -18,6 +18,9 @@ def main() -> None:
     intent = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "make the character wave hello"
     request = MotionRequest(intent=intent)
     export = generate_motion_stub(request)
+    if export is None:
+        print(f"No clip match for intent: {intent!r}")
+        raise SystemExit(1)
     path = write_export(export)
     print(f"Wrote {path}")
     print(f"  source={export.source} clip_id={export.clip_id}")

@@ -7,7 +7,7 @@ import time
 from orchestrator.schemas import MotionExport, MotionRequest
 
 
-def generate_motion_stub(request: MotionRequest) -> MotionExport:
+def generate_motion_stub(request: MotionRequest) -> MotionExport | None:
     started = time.perf_counter()
     text = request.intent.lower()
 
@@ -15,8 +15,11 @@ def generate_motion_stub(request: MotionRequest) -> MotionExport:
         clip_id = "wave_01"
     elif any(k in text for k in ("point", "look", "there")):
         clip_id = "point_01"
+    elif any(k in text for k in ("dance", "celebrate", "groove", "boogie")):
+        clip_id = "dance_01"
     else:
-        clip_id = "idle_neutral"
+        return None
+
 
     latency_ms = str(int((time.perf_counter() - started) * 1000))
 
