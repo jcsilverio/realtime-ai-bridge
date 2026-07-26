@@ -20,6 +20,9 @@ unreal/**/*.sln
 unreal/**/*.xcodeproj
 unreal/**/*.xcworkspace
 
+# Paid Fab content (local dev and demo video only, not redistributed)
+unreal/**/Content/MC_Core_Motion/
+
 # OS
 .DS_Store
 Thumbs.db
