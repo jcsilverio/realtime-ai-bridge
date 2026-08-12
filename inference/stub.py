@@ -12,11 +12,11 @@ def generate_motion_stub(request: MotionRequest) -> MotionExport | None:
     text = request.intent.lower()
 
     if any(k in text for k in ("wave", "hello", "greet")):
-        clip_id = "wave_01"
+        clip_id = "AM_Wave_01"
     elif any(k in text for k in ("point", "look", "there")):
-        clip_id = "point_01"
+        clip_id = "AM_Point_01"
     elif any(k in text for k in ("dance", "celebrate", "groove", "boogie")):
-        clip_id = "dance_01"
+        clip_id = "AM_Dance_01"
     else:
         return None
 

@@ -22,10 +22,10 @@ unreal/**/*.xcworkspace
 
 # Paid Fab content (local dev and demo video only, not redistributed)
 unreal/**/Content/MC_Core_Motion/
-unreal/**/Animations/Quinn/AM_Wave01.uasset
-unreal/**/Animations/Quinn/AM_Point01.uasset
+unreal/**/Animations/Quinn/AM_Wave_01.uasset
+unreal/**/Animations/Quinn/AM_Point_01.uasset
 unreal/**/Animations/Quinn/AM_Dance_01.uasset
-unreal/**/Animations/Quinn/AM_Idle01.uasset
+unreal/**/Animations/Quinn/AM_Idle_01.uasset
 
 # Accidental Vehicle template content (not part of Third Person consumer)
 unreal/**/Content/**/VehicleTemplate/
