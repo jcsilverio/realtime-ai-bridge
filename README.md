@@ -88,6 +88,18 @@ that the catalog loads and follows its naming rule, and that every catalog clip
 has its montage and sequence committed under `Content/IntegrationDemo/`. A clip
 id with no matching asset fails the build instead of doing nothing in UE.
 
+## Evaluation
+
+`scripts/eval_selection.py` runs the 26 requests in `evals/selection_cases.jsonl`
+through the real graph without writing an export. Six of them should play nothing.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\eval_selection.py
+```
+
+The script needs an API key, so it runs locally and not in CI.
+
+
 ## Credits and license
 
 - Code: MIT, see [LICENSE](LICENSE).
