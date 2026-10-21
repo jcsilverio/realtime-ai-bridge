@@ -64,23 +64,58 @@ The project is Blueprint only, so there's nothing to compile. The JSON Blueprint
 
 ## Run
 
-`ThirdPersonMap` opens by default. Press Play, then run from the repo root.
+`ThirdPersonMap` opens by default. Press Play, then run this from the repo root:
 
 ```powershell
-.\.venv\Scripts\python.exe -m orchestrator.run "that's terrible news"
+.\.venv\Scripts\python.exe -m orchestrator.run "we won the championship!"
 ```
 
-It prints the categories the agent chose, the evaluator's one-sentence reason,
-and the `clip_id` and `request_id` it wrote to `exports/latest.json`. The
-character plays that clip within about half a second, then blends back to idle.
+```text
+Categories: emote
+Evaluator: The triumphant celebration with arms raised clearly matches a championship win reaction.
+Wrote exports\latest.json
+  source=agent clip_id=Celebration_Montage request_id=031786a1-f57e-464d-9824-acaee5dbd29f
+```
+
+Within half a second the character throws its arms up in celebration, then blends
+back to idle. This is the file it read:
+
+```json
+{
+  "request_id": "031786a1-f57e-464d-9824-acaee5dbd29f",
+  "source": "agent",
+  "clip_id": "Celebration_Montage",
+  "metadata": {
+    "intent": "we won the championship!",
+    "categories": "emote"
+  }
+}
+```
+
+The command is in [`orchestrator/run.py`](orchestrator/run.py), the graph in
+[`orchestrator/graph.py`](orchestrator/graph.py), and the file is written by
+[`orchestrator/export_writer.py`](orchestrator/export_writer.py).
+
+When nothing fits, nothing is written:
+
+```text
+> .\.venv\Scripts\python.exe -m orchestrator.run "file my taxes"
+Categories: interact
+No clip fits intent: 'file my taxes'
+> $LASTEXITCODE
+2
+```
+
+The category step always returns at least one category, so the refusal comes from the
+clip step, which looks at the two interact clips and picks neither. `exports/latest.json`
+still holds the celebration afterwards, so Unreal has nothing new to play.
 
 Other requests to try:
 
 - "throw a quick jab"
-- "we won the championship!"
-- "you look thirsty"
+- "bust a move"
+- "pick up the book from the table"
 - "cast a fireball"
-- "file my taxes" (no clip fits, so nothing is written and the command exits 2)
 
 ### Without an API key
 
