@@ -20,6 +20,7 @@ from orchestrator.catalog import CatalogClip, Category, by_category, get_catalog
 from orchestrator.graph import Failure, build_graph, initial_state
 from orchestrator.schemas import MotionExport
 
+# Over stdio, stdout carries the protocol, so nothing in this server may print to it.
 server = MCPServer(
     "realtime-ai-bridge",
     instructions=(
@@ -57,6 +58,8 @@ def list_motions(category: Category | None = None) -> list[CatalogClip]:
     return list(by_category(category))
 
 
+# Kept outside the tool because a tool's parameters are the schema the agent sees,
+# so tests pass a graph built on the fake model here instead.
 def play_intent(intent: str, graph) -> PlayResult:
     result = graph.invoke(initial_state(intent))
     if result["failure"]:
