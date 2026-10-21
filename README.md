@@ -1,5 +1,7 @@
 # realtime-ai-bridge
 
+[![CI](https://github.com/jcsilverio/realtime-ai-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/jcsilverio/realtime-ai-bridge/actions/workflows/ci.yml)
+
 A text request goes in, and an Unreal Engine 5 character plays a matching
 animation. A LangGraph agent picks a category and then a clip from a
 tracked catalog of 11 clips across 5 categories, and an evaluator checks the
@@ -80,7 +82,11 @@ Exits 1 when no keyword matches.
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-The tests use a scripted fake model, so no key is needed.
+The tests use a scripted fake model, so no key is needed. CI runs them on
+every push to `main` and on pull requests. Besides the graph tests, they check
+that the catalog loads and follows its naming rule, and that every catalog clip
+has its montage and sequence committed under `Content/IntegrationDemo/`. A clip
+id with no matching asset fails the build instead of doing nothing in UE.
 
 ## Credits and license
 
