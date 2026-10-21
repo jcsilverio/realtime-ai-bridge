@@ -2,14 +2,41 @@
 
 [![CI](https://github.com/jcsilverio/realtime-ai-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/jcsilverio/realtime-ai-bridge/actions/workflows/ci.yml)
 
-A text request goes in, and an Unreal Engine 5 character plays a matching
-animation. A LangGraph agent picks a category and then a clip from a
-tracked catalog of 11 clips across 5 categories, and an evaluator checks the
-pick before anything is written.
+Type a request like "throw a quick jab" and an Unreal Engine 5 character plays it.
+A LangGraph agent picks a clip from a catalog of 11 animations across five
+categories (attack, react, emote, interact, and cast) and writes its choice to a JSON
+file. The UE 5.4 project picks up that file and plays the matching montage. If
+nothing in the catalog fits, nothing plays.
 
-The result is a typed JSON export that a UE 5.4 project polls and plays as a montage on the mannequin. This is routing over a fixed set of committed clips. When nothing fits, nothing is written, and UE ignores any export it doesn't recognize.
+No API key? A keyword stub runs the same path for a few clips.
 
-A keyword stub covers the same path without an API key.
+## How it works
+
+Requests come from the command line or from an MCP client, and both go through
+the same graph.
+
+```mermaid
+flowchart TD
+    A[CLI or MCP play_motion] --> B[select_categories]
+    B --> C[select_motion]
+    C -->|no fit or bad pick| X[nothing written]
+    C --> D[evaluate]
+    D -->|reject, retry once| C
+    D -->|reject twice| X
+    D -->|pass| E[write exports/latest.json]
+    E --> F[UE consumer polls and plays the montage]
+```
+
+The agent picks in two steps. First it narrows the request to one or two
+categories, then it chooses a clip from those, or says none fits. A separate call
+checks that choice against the request. If it's rejected, the agent gets one more
+try with that clip taken out. Python validates every answer along the way, so a
+clip name the model made up never reaches Unreal.
+
+On the Unreal side, a component on the character reads the file twice a second
+and plays the montage whose name matches `clip_id`. Each `request_id` plays once,
+and anything it doesn't recognize is ignored. Idle and locomotion stay on the
+Animation Blueprint.
 
 ## Requirements
 
@@ -107,8 +134,8 @@ The script needs an API key, so it runs locally and not in CI.
 - `motion://contract` is a resource with the JSON schema of the export Unreal reads.
 - `list_motions` is a tool that lists clips, optionally for one category.
 - `play_motion` is a tool that runs a request through the selection graph. When
-  nothing fits or the evaluator rejects the pick, it returns the reason and writes
-  nothing.
+nothing fits or the evaluator rejects the pick, it returns the reason and writes
+nothing.
 
 To connect a client, point it at the venv's Python with the server script as its
 argument. Most clients take a JSON entry like this one, though the file name and the
@@ -135,6 +162,6 @@ client does, so the tests check the server without any client installed.
 
 - Code: MIT, see [LICENSE](LICENSE).
 - Animation: [Quaternius Universal Animation Library](https://quaternius.com/packs/universalanimationlibrary.html) (CC0), retargeted to the UE5 mannequin under
-  `unreal/RealtimeAIBridge/Content/IntegrationDemo/`.
+`unreal/RealtimeAIBridge/Content/IntegrationDemo/`.
 - Third Person template content and mannequin: Epic Games, under the Unreal
-  Engine EULA.
+Engine EULA.
