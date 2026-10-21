@@ -6,7 +6,10 @@ import sys
 
 from dotenv import load_dotenv
 
-from orchestrator.graph import build_graph
+from orchestrator.graph import Failure, build_graph, initial_state
+
+# Exit 1 stays reserved for unhandled errors such as a failed API call.
+EXIT_CODES: dict[Failure, int] = {"no_fit": 2, "invalid_pick": 3, "rejected": 4}
 
 
 def main() -> None:
@@ -16,21 +19,15 @@ def main() -> None:
         if len(sys.argv) > 1
         else "throw a quick jab"
     )
-    app = build_graph()
-    result = app.invoke(
-        {
-            "intent": intent,
-            "categories": [],
-            "clip_id": None,
-            "export": None,
-            "export_path": None,
-            "error": None,
-        }
-    )
+    result = build_graph().invoke(initial_state(intent))
     print(f"Categories: {', '.join(result['categories'])}")
-    if result.get("error"):
+    for clip_id in result["rejected_clip_ids"]:
+        print(f"Rejected: {clip_id}")
+    if result["eval_reason"]:
+        print(f"Evaluator: {result['eval_reason']}")
+    if result["failure"]:
         print(result["error"])
-        raise SystemExit(1)
+        raise SystemExit(EXIT_CODES[result["failure"]])
     export = result["export"]
     print(f"Wrote {result['export_path']}")
     print(f"  source={export.source} clip_id={export.clip_id} request_id={export.request_id}")

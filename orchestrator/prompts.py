@@ -29,8 +29,20 @@ Choose only from the candidate clips in the message, and return its clip_id exac
 as written. If none of them fits the request, return null.
 """
 
+EVALUATOR_SYSTEM_PROMPT = """\
+You check one character animation choice before it plays.
+The request may be an instruction or something said to the character. Decide whether a
+viewer would read the chosen clip as a fitting response to it. A clip that is only loosely
+related, or that shows a different action than the one asked for, fails.
+Give a one sentence reason, then the verdict.
+"""
+
 
 def format_candidates(intent: str, clips: Sequence[CatalogClip]) -> str:
     lines = [f"Request: {intent}", "", "Candidate clips:"]
     lines += [f"- {clip.clip_id}: {clip.description}" for clip in clips]
     return "\n".join(lines)
+
+
+def format_evaluation(intent: str, clip: CatalogClip) -> str:
+    return f"Request: {intent}\nChosen clip: {clip.clip_id}: {clip.description}"
