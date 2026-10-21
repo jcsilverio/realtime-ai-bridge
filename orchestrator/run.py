@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 
 from dotenv import load_dotenv
@@ -14,6 +15,9 @@ EXIT_CODES: dict[Failure, int] = {"no_fit": 2, "invalid_pick": 3, "rejected": 4}
 
 def main() -> None:
     load_dotenv()
+    if not os.environ.get("OPENAI_API_KEY"):
+        print("OPENAI_API_KEY is not set. Copy .env.example to .env and add your key.")
+        raise SystemExit(1)
     intent = (
         " ".join(sys.argv[1:])
         if len(sys.argv) > 1
