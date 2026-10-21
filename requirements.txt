@@ -3,4 +3,5 @@ langgraph>=0.4.8
 langchain-openai>=0.3.21
 langchain-core>=0.3.64
 python-dotenv>=1.1.0
+mcp>=2.3.0,<3
 pytest>=9.1.1
