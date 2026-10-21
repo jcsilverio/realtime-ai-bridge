@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from functools import partial
+from pathlib import Path
 from typing import Literal, TypedDict
 
 from langchain_core.language_models import BaseChatModel
@@ -24,6 +26,7 @@ from orchestrator.prompts import (
 from orchestrator.schemas import MotionExport
 
 Failure = Literal["no_fit", "invalid_pick", "rejected"]
+ExportWriter = Callable[[MotionExport], Path]
 
 
 class CategoryPick(BaseModel):
@@ -130,13 +133,13 @@ def evaluate_node(state: MotionGraphState, judge: Runnable) -> dict:
     return update
 
 
-def write_node(state: MotionGraphState) -> dict:
+def write_node(state: MotionGraphState, writer: ExportWriter) -> dict:
     export = MotionExport(
         source="agent",
         clip_id=state["clip_id"],
         metadata={"intent": state["intent"], "categories": ",".join(state["categories"])},
     )
-    path = write_export(export)
+    path = writer(export)
     return {"export": export, "export_path": str(path)}
 
 
@@ -154,9 +157,15 @@ def route_after_evaluate(state: MotionGraphState) -> Literal["write", "select_mo
     return "__end__"
 
 
-def build_graph(llm: BaseChatModel | None = None):
+def build_graph(llm: BaseChatModel | None = None, writer: ExportWriter | None = None):
+    """Defaults to the configured OpenAI model and the real export file.
+
+    Tests and the eval pass their own.
+    """
     if llm is None:
         llm = ChatOpenAI(model=MODEL_NAME, reasoning_effort=REASONING_EFFORT)
+    if writer is None:
+        writer = write_export
     category_picker = llm.with_structured_output(CategoryPick)
     motion_picker = llm.with_structured_output(ClipPick)
     judge = llm.with_structured_output(EvalVerdict)
@@ -165,7 +174,7 @@ def build_graph(llm: BaseChatModel | None = None):
     graph.add_node("select_categories", partial(select_categories_node, picker=category_picker))
     graph.add_node("select_motion", partial(select_motion_node, picker=motion_picker))
     graph.add_node("evaluate", partial(evaluate_node, judge=judge))
-    graph.add_node("write", write_node)
+    graph.add_node("write", partial(write_node, writer=writer))
     graph.add_edge(START, "select_categories")
     graph.add_edge("select_categories", "select_motion")
     graph.add_conditional_edges(
