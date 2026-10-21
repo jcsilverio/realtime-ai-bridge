@@ -110,12 +110,16 @@ The category step always returns at least one category, so the refusal comes fro
 clip step, which looks at the two interact clips and picks neither. `exports/latest.json`
 still holds the celebration afterwards, so Unreal has nothing new to play.
 
-Other requests to try:
+More requests to try. None of them names a clip, so the keyword stub can't handle
+them, but the agent maps each one to a category and a clip:
 
-- "throw a quick jab"
-- "bust a move"
-- "pick up the book from the table"
-- "cast a fireball"
+| Request | Category | Clip |
+|---|---|---|
+| "sock him in the jaw" | attack | `Punch_Jab_Montage` |
+| "the brute decks you right in the face" | react | `Hit_Head_Montage` |
+| "bust a move" | emote | `Dance_Loop_Montage` |
+| "there's a coin on the table in front of you" | interact | `PickUp_Table_Montage` |
+| "hurl a fireball at the goblin" | cast | `Spell_Simple_Shoot_Montage` |
 
 ### Without an API key
 
