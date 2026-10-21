@@ -1,0 +1,26 @@
+{"intent": "throw a quick jab", "acceptable_clip_ids": ["Punch_Jab_Montage"]}
+{"intent": "take a hit to the head", "acceptable_clip_ids": ["Hit_Head_Montage"]}
+{"intent": "raise your arms and cheer", "acceptable_clip_ids": ["Celebration_Montage"]}
+{"intent": "do a little dance", "acceptable_clip_ids": ["Dance_Loop_Montage"]}
+{"intent": "pick up the book from the table", "acceptable_clip_ids": ["PickUp_Table_Montage"]}
+{"intent": "cast a spell", "acceptable_clip_ids": ["Spell_Simple_Shoot_Montage"]}
+{"intent": "sock him in the jaw", "acceptable_clip_ids": ["Punch_Jab_Montage"]}
+{"intent": "boot him in the shins", "acceptable_clip_ids": ["Kick_Montage"]}
+{"intent": "bring your blade down on him", "acceptable_clip_ids": ["Sword_Attack_Standing_Montage"]}
+{"intent": "hurl a fireball at the goblin", "acceptable_clip_ids": ["Spell_Simple_Shoot_Montage"]}
+{"intent": "break down in tears", "acceptable_clip_ids": ["Crying_Montage"]}
+{"intent": "bust a move", "acceptable_clip_ids": ["Dance_Loop_Montage"]}
+{"intent": "you look thirsty", "acceptable_clip_ids": ["Drink_Montage"]}
+{"intent": "that's terrible news", "acceptable_clip_ids": ["Crying_Montage"]}
+{"intent": "there's a coin on the table in front of you", "acceptable_clip_ids": ["PickUp_Table_Montage"]}
+{"intent": "the brute decks you right in the face", "acceptable_clip_ids": ["Hit_Head_Montage"]}
+{"intent": "a fist slams into your belly", "acceptable_clip_ids": ["Hit_Stomach_Montage"]}
+{"intent": "punch him in the gut", "acceptable_clip_ids": ["Punch_Jab_Montage"]}
+{"intent": "we won the championship!", "acceptable_clip_ids": ["Celebration_Montage", "Dance_Loop_Montage"]}
+{"intent": "fight him", "acceptable_clip_ids": ["Punch_Jab_Montage", "Kick_Montage"]}
+{"intent": "wave hello", "acceptable_clip_ids": []}
+{"intent": "sit down on the bench", "acceptable_clip_ids": []}
+{"intent": "point at the door", "acceptable_clip_ids": []}
+{"intent": "block his attack", "acceptable_clip_ids": []}
+{"intent": "file my taxes", "acceptable_clip_ids": []}
+{"intent": "what's the weather tomorrow", "acceptable_clip_ids": []}
