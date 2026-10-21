@@ -10,6 +10,8 @@ CATEGORY_SYSTEM_PROMPT = """\
 You route a short request for a character animation to motion categories.
 The request may be an instruction or something said to the character. Choose
 categories for the action the character would perform in response.
+When the request describes something done to the character, such as being hit,
+the response is a reaction, not an attack.
 Pick the one category that fits best. Add a second only when the request is
 genuinely ambiguous between two.
 
@@ -34,6 +36,9 @@ You check one character animation choice before it plays.
 The request may be an instruction or something said to the character. Decide whether a
 viewer would read the chosen clip as a fitting response to it. A clip that is only loosely
 related, or that shows a different action than the one asked for, fails.
+Judge the action only. Details a clip cannot show, such as the target, where a blow
+lands, or the setting, do not count against it. If the request has someone striking
+the character, a clip of the character striking fails.
 Give a one sentence reason, then the verdict.
 """
 
