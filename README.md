@@ -99,6 +99,37 @@ through the real graph without writing an export. Six of them should play nothin
 
 The script needs an API key, so it runs locally and not in CI.
 
+## Use from an MCP client
+
+`mcp_server/server.py` runs the same graph as the CLI as an MCP server over stdio.
+
+- `motion://catalog` is a resource with every clip, its category, and its description.
+- `motion://contract` is a resource with the JSON schema of the export Unreal reads.
+- `list_motions` is a tool that lists clips, optionally for one category.
+- `play_motion` is a tool that runs a request through the selection graph. When
+  nothing fits or the evaluator rejects the pick, it returns the reason and writes
+  nothing.
+
+To connect a client, point it at the venv's Python with the server script as its
+argument. Most clients take a JSON entry like this one, though the file name and the
+top-level key vary by client:
+
+```json
+{
+  "mcpServers": {
+    "realtime-ai-bridge": {
+      "command": "C:\\path\\to\\realtime-ai-bridge\\.venv\\Scripts\\python.exe",
+      "args": ["C:\\path\\to\\realtime-ai-bridge\\mcp_server\\server.py"]
+    }
+  }
+}
+```
+
+The server reads the key from `.env` in the repo root, the same as the CLI. With PIE
+running, ask the agent what the character can do, then ask for a move.
+
+`tests/test_mcp_stdio.py` starts the server and calls it over stdio the same way a
+client does, so the tests check the server without any client installed.
 
 ## Credits and license
 
