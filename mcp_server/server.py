@@ -20,7 +20,6 @@ from orchestrator.catalog import CatalogClip, Category, by_category, get_catalog
 from orchestrator.graph import Failure, build_graph, initial_state
 from orchestrator.schemas import MotionExport
 
-# Over stdio, stdout carries the protocol, so nothing in this server may print to it.
 server = MCPServer(
     "realtime-ai-bridge",
     instructions=(
