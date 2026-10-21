@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
-MotionSource = Literal["stub"]
+MotionSource = Literal["stub", "agent"]
 
 
 class MotionRequest(BaseModel):

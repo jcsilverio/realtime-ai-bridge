@@ -21,6 +21,7 @@ def main() -> None:
         {
             "intent": intent,
             "categories": [],
+            "clip_id": None,
             "export": None,
             "export_path": None,
             "error": None,

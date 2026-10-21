@@ -11,12 +11,11 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, ConfigDict, Field
 
-from inference.stub import generate_motion_stub
-from orchestrator.catalog import Category
+from orchestrator.catalog import Category, by_category
 from orchestrator.config import MODEL_NAME, REASONING_EFFORT
 from orchestrator.export_writer import write_export
-from orchestrator.prompts import CATEGORY_SYSTEM_PROMPT
-from orchestrator.schemas import MotionExport, MotionRequest
+from orchestrator.prompts import CATEGORY_SYSTEM_PROMPT, MOTION_SYSTEM_PROMPT, format_candidates
+from orchestrator.schemas import MotionExport
 
 
 class CategoryPick(BaseModel):
@@ -25,9 +24,16 @@ class CategoryPick(BaseModel):
     categories: list[Category] = Field(min_length=1, max_length=2)
 
 
+class ClipPick(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    clip_id: str | None
+
+
 class MotionGraphState(TypedDict):
     intent: str
     categories: list[Category]
+    clip_id: str | None
     export: MotionExport | None
     export_path: str | None
     error: str | None
@@ -38,24 +44,33 @@ def select_categories_node(state: MotionGraphState, picker: Runnable) -> dict:
     return {"categories": pick.categories}
 
 
-def generate_node(state: MotionGraphState) -> dict:
-    request = MotionRequest(intent=state["intent"])
-    export = generate_motion_stub(request)
-    if export is None:
-        return {
-            "export": None,
-            "error": f"No clip match for intent: {state['intent']!r}",
-        }
-    return {"export": export, "error": None}
+def select_motion_node(state: MotionGraphState, picker: Runnable) -> dict:
+    candidates = [clip for category in state["categories"] for clip in by_category(category)]
+    pick = picker.invoke(
+        [
+            ("system", MOTION_SYSTEM_PROMPT),
+            ("human", format_candidates(state["intent"], candidates)),
+        ]
+    )
+    if pick.clip_id is None:
+        return {"clip_id": None, "error": f"No clip fits intent: {state['intent']!r}"}
+    if pick.clip_id not in {clip.clip_id for clip in candidates}:
+        return {"clip_id": None, "error": f"Model picked {pick.clip_id!r}, which is not a candidate"}
+    return {"clip_id": pick.clip_id}
 
 
 def write_node(state: MotionGraphState) -> dict:
-    path = write_export(state["export"])
-    return {"export_path": str(path)}
+    export = MotionExport(
+        source="agent",
+        clip_id=state["clip_id"],
+        metadata={"intent": state["intent"], "categories": ",".join(state["categories"])},
+    )
+    path = write_export(export)
+    return {"export": export, "export_path": str(path)}
 
 
-def route_after_generate(state: MotionGraphState) -> Literal["write", "__end__"]:
-    if state.get("export") is None:
+def route_after_select(state: MotionGraphState) -> Literal["write", "__end__"]:
+    if state.get("clip_id") is None:
         return "__end__"
     return "write"
 
@@ -64,16 +79,17 @@ def build_graph(llm: BaseChatModel | None = None):
     if llm is None:
         llm = ChatOpenAI(model=MODEL_NAME, reasoning_effort=REASONING_EFFORT)
     category_picker = llm.with_structured_output(CategoryPick)
+    motion_picker = llm.with_structured_output(ClipPick)
 
     graph = StateGraph(MotionGraphState)
     graph.add_node("select_categories", partial(select_categories_node, picker=category_picker))
-    graph.add_node("generate", generate_node)
+    graph.add_node("select_motion", partial(select_motion_node, picker=motion_picker))
     graph.add_node("write", write_node)
     graph.add_edge(START, "select_categories")
-    graph.add_edge("select_categories", "generate")
+    graph.add_edge("select_categories", "select_motion")
     graph.add_conditional_edges(
-        "generate",
-        route_after_generate,
+        "select_motion",
+        route_after_select,
         {"write": "write", "__end__": END},
     )
     graph.add_edge("write", END)
