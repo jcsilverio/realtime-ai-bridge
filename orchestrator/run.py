@@ -1,4 +1,4 @@
-"""CLI: python -m orchestrator.run \"make the character wave hello\""""
+"""CLI: python -m orchestrator.run \"throw a quick jab\""""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ def main() -> None:
     intent = (
         " ".join(sys.argv[1:])
         if len(sys.argv) > 1
-        else "make the character wave hello"
+        else "throw a quick jab"
     )
     app = build_graph()
     result = app.invoke(

@@ -1,0 +1,83 @@
+{
+  "source": "Quaternius Universal Animation Library, CC0 1.0, retargeted to the UE5 mannequin",
+  "categories": ["attack", "react", "emote", "interact", "cast"],
+  "clips": [
+    {
+      "clip_id": "Punch_Jab_Montage",
+      "category": "attack",
+      "source_anim": "Punch_Jab",
+      "description": "Quick lead-hand jab thrown from a standing guard",
+      "demo_tags": ["jab", "punch", "strike", "fight"]
+    },
+    {
+      "clip_id": "Kick_Montage",
+      "category": "attack",
+      "source_anim": "Kick",
+      "description": "Standing kick aimed at a target in front",
+      "demo_tags": ["kick", "strike", "fight"]
+    },
+    {
+      "clip_id": "Sword_Attack_Standing_Montage",
+      "category": "attack",
+      "source_anim": "Sword_Attack_Standing",
+      "description": "Standing weapon swing performed empty-handed, reads as a slash or chop",
+      "demo_tags": ["swing", "slash", "chop", "sword"]
+    },
+    {
+      "clip_id": "Hit_Head_Montage",
+      "category": "react",
+      "source_anim": "Hit_Head",
+      "description": "Sharp flinch from a blow to the head or face",
+      "demo_tags": ["hit", "head", "flinch", "struck"]
+    },
+    {
+      "clip_id": "Hit_Stomach_Montage",
+      "category": "react",
+      "source_anim": "Hit_Stomach",
+      "description": "Recoil from a blow to the stomach",
+      "demo_tags": ["hit", "stomach", "gut", "winded"]
+    },
+    {
+      "clip_id": "Celebration_Montage",
+      "category": "emote",
+      "source_anim": "Celebration",
+      "description": "Triumphant celebration with arms raised overhead",
+      "demo_tags": ["celebrate", "victory", "cheer"]
+    },
+    {
+      "clip_id": "Crying_Montage",
+      "category": "emote",
+      "source_anim": "Crying",
+      "description": "Crying and sobbing in distress",
+      "demo_tags": ["cry", "sob", "sad", "grief"]
+    },
+    {
+      "clip_id": "Dance_Loop_Montage",
+      "category": "emote",
+      "source_anim": "Dance_Loop",
+      "description": "Short dance groove",
+      "demo_tags": ["dance", "groove", "music"]
+    },
+    {
+      "clip_id": "PickUp_Table_Montage",
+      "category": "interact",
+      "source_anim": "PickUp_Table",
+      "description": "Reaches forward and picks up an object from a table at waist height",
+      "demo_tags": ["pick up", "grab", "take", "table"]
+    },
+    {
+      "clip_id": "Drink_Montage",
+      "category": "interact",
+      "source_anim": "Drink",
+      "description": "Raises a cup to the mouth and drinks",
+      "demo_tags": ["drink", "sip", "cup"]
+    },
+    {
+      "clip_id": "Spell_Simple_Shoot_Montage",
+      "category": "cast",
+      "source_anim": "Spell_Simple_Shoot",
+      "description": "Casts a single spell projectile from an outstretched hand",
+      "demo_tags": ["cast", "spell", "magic", "projectile"]
+    }
+  ]
+}

@@ -15,5 +15,6 @@ def write_export(export: MotionExport, path: Path | None = None) -> Path:
     tmp = target.with_suffix(".json.tmp")
     payload = export.model_dump(mode="json")
     tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    # Replace in one step so the Unreal poller never reads a half-written file.
     tmp.replace(target)
     return target

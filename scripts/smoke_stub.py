@@ -15,7 +15,7 @@ from orchestrator.schemas import MotionRequest
 
 
 def main() -> None:
-    intent = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "make the character wave hello"
+    intent = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "throw a quick jab"
     request = MotionRequest(intent=intent)
     export = generate_motion_stub(request)
     if export is None:

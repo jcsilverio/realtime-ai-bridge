@@ -1,0 +1,9 @@
+{
+  "request_id": "sample-jab-stub",
+  "source": "stub",
+  "clip_id": "Punch_Jab_Montage",
+  "metadata": {
+    "latency_ms": "0",
+    "intent": "throw a quick jab"
+  }
+}
