@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 
 from dotenv import load_dotenv
 
 from orchestrator.graph import Failure, build_graph, initial_state
+from orchestrator.paths import REPO_ROOT
 
 # Exit 1 stays reserved for unhandled errors such as a failed API call.
 EXIT_CODES: dict[Failure, int] = {"no_fit": 2, "invalid_pick": 3, "rejected": 4}
@@ -33,7 +35,7 @@ def main() -> None:
         print(result["error"])
         raise SystemExit(EXIT_CODES[result["failure"]])
     export = result["export"]
-    print(f"Wrote {result['export_path']}")
+    print(f"Wrote {Path(result['export_path']).relative_to(REPO_ROOT)}")
     print(f"  source={export.source} clip_id={export.clip_id} request_id={export.request_id}")
 
 
