@@ -142,6 +142,32 @@ Exits 1 when no keyword matches.
 | 3 | The model picked a clip outside the candidates it was shown. Nothing written |
 | 4 | The evaluator rejected the pick and the one retry. Nothing written |
 
+## The export file
+
+`exports/latest.json` is the only thing Python and Unreal share. Its shape is
+`MotionExport` in [`orchestrator/schemas.py`](orchestrator/schemas.py):
+
+| Field | Read by Unreal | Purpose |
+|---|---|---|
+| `request_id` | Yes | New for every export. Each one plays once. |
+| `clip_id` | Yes | The montage asset name under `Content/IntegrationDemo/`. |
+| `source` | No | `agent` or `stub`, whichever wrote the file. |
+| `metadata` | No | Strings for logging, such as the original request. |
+
+The model rejects any other field, so a misspelled field fails in Python instead of
+being silently skipped in Unreal. Playback settings like blend times live on each
+montage asset, not in the file. On the Unreal side, a missing file, JSON it can't
+read, or an unknown `clip_id` does nothing.
+
+Anything that writes this shape can drive the character. The keyword stub does, and
+so does copying the tracked sample over the live file with PIE running:
+
+```powershell
+Copy-Item exports\samples\jab_stub.json exports\latest.json
+```
+
+Over MCP, `motion://contract` serves the same schema, generated from the model.
+
 ## Tests
 
 ```powershell
