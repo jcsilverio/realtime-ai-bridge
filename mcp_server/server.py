@@ -77,8 +77,10 @@ def play_intent(intent: str, graph) -> PlayResult:
 def play_motion(intent: str) -> PlayResult:
     """Play the clip that best fits a plain-language request, such as "throw a quick jab".
 
-    Nothing plays if no clip fits or the pick fails review. Then played is false and
-    reason says why. Do not retry with the same request.
+    played means the export was written for Unreal to pick up. Unreal does not confirm
+    playback, so nothing appears unless the scene is running. Nothing plays if no clip
+    fits or the pick fails review. Then played is false and reason says why. Do not
+    retry with the same request.
     """
     if not os.environ.get("OPENAI_API_KEY"):
         # Only a ToolError's message reaches the agent. Any other exception shows up
