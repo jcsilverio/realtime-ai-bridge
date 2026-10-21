@@ -48,7 +48,13 @@ def test_duplicate_clip_id_fails(tmp_path: Path, catalog_data: dict) -> None:
 
 def test_unknown_category_fails(tmp_path: Path, catalog_data: dict) -> None:
     catalog_data["clips"][0]["category"] = "wave"
-    with pytest.raises(ValidationError, match="unknown category"):
+    with pytest.raises(ValidationError, match="Input should be"):
+        load_catalog(write_catalog(tmp_path, catalog_data))
+
+
+def test_categories_must_match_type(tmp_path: Path, catalog_data: dict) -> None:
+    catalog_data["categories"].remove("cast")
+    with pytest.raises(ValidationError, match="do not match the Category type"):
         load_catalog(write_catalog(tmp_path, catalog_data))
 
 

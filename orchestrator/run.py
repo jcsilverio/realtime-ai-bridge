@@ -4,10 +4,13 @@ from __future__ import annotations
 
 import sys
 
+from dotenv import load_dotenv
+
 from orchestrator.graph import build_graph
 
 
 def main() -> None:
+    load_dotenv()
     intent = (
         " ".join(sys.argv[1:])
         if len(sys.argv) > 1
@@ -17,11 +20,13 @@ def main() -> None:
     result = app.invoke(
         {
             "intent": intent,
+            "categories": [],
             "export": None,
             "export_path": None,
             "error": None,
         }
     )
+    print(f"Categories: {', '.join(result['categories'])}")
     if result.get("error"):
         print(result["error"])
         raise SystemExit(1)
