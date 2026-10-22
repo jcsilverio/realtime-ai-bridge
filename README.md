@@ -190,6 +190,18 @@ through the real graph without writing an export. Six of them should play nothin
 ```
 
 The script needs an API key, so it runs locally and not in CI.
+Results with `gpt-5.4-mini` at low reasoning effort, Oct. 2026:
+
+| Run | Category routing | Clip choice | Nothing played when nothing fits | Overall |
+|---|---|---|---|---|
+| 1 | 20/20 | 20/20 | 6/6 | 26/26 |
+| 2 | 20/20 | 20/20 | 6/6 | 26/26 |
+| 3 | 19/20 | 19/20 | 6/6 | 25/26 |
+
+The one miss was "you look thirsty", which went to emote instead of interact, so
+nothing played. These runs follow one prompt change made after two earlier runs
+scored 25/26 and 23/26. That change was checked on these same 26 cases, so the
+numbers show the prompts fit this set, not how they would do on new requests.
 
 ## Use from an MCP client
 
