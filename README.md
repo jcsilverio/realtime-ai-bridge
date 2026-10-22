@@ -8,6 +8,8 @@ categories (attack, react, emote, interact, and cast) and writes its choice to a
 file. The UE 5.4 project picks up that file and plays the matching montage. If
 nothing in the catalog fits, nothing plays.
 
+![Three typed requests make the Unreal character cast a spell, dance, and drink](docs/images/hero.gif)
+
 No API key? A keyword stub runs the same path for a few clips.
 
 ## How it works
